@@ -1,0 +1,48 @@
+---
+title: "Awit, Julia Theressa"
+output: pdf_document
+date: "03-03-2025"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
+
+#Github Link: 
+
+5. A geospatial analysis system images. The percentage of images supplied by each censor and the percentage of images relevant to a query are shown in the following table.
+```{r}
+##Define the data
+sensors <- data.frame(Supplied = c(15, 20, 25, 40), Relevant = c(50, 60, 80, 85))
+
+##Compute (Overall relevance using a weighted sum)
+overall_relevance <- sum((sensors$Supplied / 100) * (sensors$Relevant / 100)) * 100
+
+##Print
+cat("Overall percentage of relevant images:", overall_relevance, "%\n")
+``` 
+6. A fair coin is tossed twice.
+
+Let E1 be the event that both tosses have the same outcome, that is,
+E1 = (HH, TT).
+Let E2 be the event that the first toss is a head, that is, E2 = (HH, HT).
+Let E3 be the event that the second toss is a head, that is, E3 = (TH, HH).
+Show that E1, E2, and E3 are pairwise independent but not mutually independent.
+```{r}
+s <- c("HH", "HT", "TH", "TT")
+E1 <- c("HH", "TT"); E2 <- c("HH", "HT"); E3 <- c("HH", "TH")
+P <- function(E) length(E) / length(s)
+PI <- function(A, B) length(intersect(A, B)) / length(s)
+PE1 <- P(E1); PE2 <- P(E2); PE3 <- P(E3)
+PE1E2 <- PI(E1, E2); PE1E3 <- PI(E1, E3); PE2E3 <- PI(E2, E3)
+PE1E2E3 <- PI(intersect(E1, E2), E3)
+
+pairwise <- (PE1E2 == PE1 * PE2) & (PE1E3 == PE1 * PE3) & (PE2E3 == PE2 * PE3)
+mutual <- (PE1E2E3 == PE1 * PE2 * PE3)
+
+cat("P(E1)=", PE1, " P(E2)=", PE2, " P(E3)=", PE3, "\n")
+cat("P(E1∩E2)=", PE1E2, " P(E1∩E3)=", PE1E3, " P(E2∩E3)=", PE2E3, "\n")
+cat("P(E1∩E2∩E3)=", PE1E2E3, "\n")
+cat("Pairwise independent?", pairwise, "\nMutually independent?", mutual, "\n")
+``` 
+

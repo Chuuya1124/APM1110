@@ -1,0 +1,108 @@
+---
+jupyter:
+  colab:
+  kernelspec:
+    display_name: R
+    name: ir
+  language_info:
+    name: R
+  nbformat: 4
+  nbformat_minor: 0
+---
+
+::: {.cell .markdown id="j-zzmzQCQ2o0"}
+1.  
+:::
+
+::: {.cell .code execution_count="1" colab="{\"base_uri\":\"https://localhost:8080/\"}" id="bJJykAY9K2EU" outputId="e501b53a-10e8-4bcb-fb7e-bf4de1c1f184"}
+``` python
+##Given data
+data <- data.frame(
+  server = c("Server 1", "Server 2", "Server 3"),
+  pct_messages = c(40, 25, 35) / 100,
+  pct_errors = c(1, 2, 1.5) / 100
+)
+
+##(a) Probability of receiving an email with an error
+p_error <- sum(data$pct_messages * data$pct_errors)
+
+##(b) Probability of a message arriving without error
+p_no_error <- 1 - p_error
+
+##(c) Probability that a message was sent through Server 1 given it arrived without error
+p_server1_given_no_error <- (data$pct_messages[1] * (1 - data$pct_errors[1])) / p_no_error
+
+##Print results
+cat("(a) Probability of receiving an email with an error:", round(p_error, 4), "\n")
+cat("(b) Probability that a message arrives without error:", round(p_no_error, 4), "\n")
+cat("(c) Probability that a message was sent through Server 1 given it arrived without error:", round(p_server1_given_no_error, 4), "\n")
+```
+
+::: {.output .stream .stdout}
+    (a) Probability of receiving an email with an error: 0.0142 
+    (b) Probability that a message arrives without error: 0.9858 
+    (c) Probability that a message was sent through Server 1 given it arrived without error: 0.4017 
+:::
+:::
+
+::: {.cell .markdown id="_LSKdyrTNHao"}
+1.  
+:::
+
+::: {.cell .code execution_count="2" colab="{\"base_uri\":\"https://localhost:8080/\"}" id="IEgqc2OiNH_u" outputId="81619312-d819-4f65-8dad-3119d94cf523"}
+``` python
+##Given probabilities
+p_A <- 0.2; p_B <- 0.7; p_C <- 1 - (p_A + p_B)
+p_G_given_A <- 0.1; p_G_given_B <- 0.4; p_G_given_C <- 0.2
+
+##Calculations
+p_G <- p_A * p_G_given_A + p_B * p_G_given_B + p_C * p_G_given_C
+p_Gc <- 1 - p_G
+p_B_given_G <- (p_B * p_G_given_B) / p_G
+p_B_given_Gc <- (p_B * (1 - p_G_given_B)) / p_Gc
+p_C_given_G <- (p_C * p_G_given_C) / p_G
+p_C_given_Gc <- (p_C * (1 - p_G_given_C)) / p_Gc
+
+# Print results
+cat(sprintf("(a) P(G^c): %.4f\n(b) P(B|G): %.4f\n(c) Required probabilities:\nP(G): %.4f\nP(B|G^c): %.4f\nP(C|G): %.4f\nP(C|G^c): %.4f\n", p_Gc, p_B_given_G, p_G, p_B_given_Gc, p_C_given_G, p_C_given_Gc))
+```
+
+::: {.output .stream .stdout}
+    (a) P(G^c): 0.6800
+    (b) P(B|G): 0.8750
+    (c) Required probabilities:
+    P(G): 0.3200
+    P(B|G^c): 0.6176
+    P(C|G): 0.0625
+    P(C|G^c): 0.1176
+:::
+:::
+
+::: {.cell .markdown id="fZnmzT8SN1lA"}
+1.  
+:::
+
+::: {.cell .code execution_count="3" colab="{\"base_uri\":\"https://localhost:8080/\"}" id="m0FpZ9qLN1-h" outputId="efb57d6a-19fa-4414-bc65-38dfafdf318f"}
+``` python
+##Given probabilities
+p_I <- 0.7; p_E <- 0.3  # Probabilities of spyware coming via Internet or Email
+detect_I <- 0.6; detect_E <- 0.8  # Detection probabilities
+
+##(a) Probability that the spyware infects the system
+p_not_detect_I <- 1 - detect_I
+p_not_detect_E <- 1 - detect_E
+p_infect <- p_I * p_not_detect_I + p_E * p_not_detect_E
+
+##(b) Probability that spyware came via Internet given it was detected
+p_detect <- p_I * detect_I + p_E * detect_E
+p_I_given_detect <- (p_I * detect_I) / p_detect
+
+##Print results
+cat(sprintf("(a) Probability of infection: %.4f\n(b) P(Internet | Detected): %.4f\n", p_infect, p_I_given_detect))
+```
+
+::: {.output .stream .stdout}
+    (a) Probability of infection: 0.3400
+    (b) P(Internet | Detected): 0.6364
+:::
+:::

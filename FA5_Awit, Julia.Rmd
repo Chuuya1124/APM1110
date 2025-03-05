@@ -1,0 +1,73 @@
+---
+title: "FA5"
+author: "Awit, Julia Theressa"
+output: pdf_document
+---
+
+# Exercise 6
+```{r}
+# Given data
+server_data <- data.frame(
+  server = c("Server 1", "Server 2", "Server 3"),
+  pct_messages = c(40, 25, 35) / 100,
+  pct_errors = c(1, 2, 1.5) / 100
+)
+
+# (a) Probability of receiving an email with an error
+p_error <- sum(server_data$pct_messages * server_data$pct_errors)
+
+# (b) Probability of a message arriving without error
+p_no_error <- 1 - p_error
+
+# (c) Probability that a message was sent through Server 1 given it arrived without error
+p_server1_given_no_error <- (server_data$pct_messages[1] * (1 - server_data$pct_errors[1])) / p_no_error
+
+# Print results
+list(p_error = round(p_error, 4), p_no_error = round(p_no_error, 4), p_server1_given_no_error = round(p_server1_given_no_error, 4))
+```
+
+# Exercise 9
+```{r}
+# Given probabilities
+p_A <- 0.2  # Not buying
+p_B <- 0.7  # Buying
+p_C <- 0.1  # Undecided
+p_G_given_A <- 0.1
+p_G_given_B <- 0.4
+p_G_given_C <- 0.2
+
+# (a) Probability of not upgrading
+p_G <- (p_A * p_G_given_A) + (p_B * p_G_given_B) + (p_C * p_G_given_C)
+p_not_G <- 1 - p_G
+
+# (b) Posterior probability of buying given G
+p_B_given_G <- (p_B * p_G_given_B) / p_G
+
+# (c) Calculating required probabilities
+p_B_given_not_G <- (p_B * (1 - p_G_given_B)) / p_not_G
+p_C_given_G <- (p_C * p_G_given_C) / p_G
+p_C_given_not_G <- (p_C * (1 - p_G_given_C)) / p_not_G
+
+# Print results
+list(p_not_G = round(p_not_G, 4), p_B_given_G = round(p_B_given_G, 4), p_B_given_not_G = round(p_B_given_not_G, 4), p_C_given_G = round(p_C_given_G, 4), p_C_given_not_G = round(p_C_given_not_G, 4))
+```
+
+# Exercise 13
+```{r}
+# Given probabilities
+p_I <- 0.7  # Internet
+p_E <- 0.3  # Email
+p_D_given_I <- 0.6  # Detected if from Internet
+p_D_given_E <- 0.8  # Detected if from Email
+
+# (a) Probability of infection (not detected)
+p_not_D_given_I <- 1 - p_D_given_I
+p_not_D_given_E <- 1 - p_D_given_E
+p_infected <- (p_I * p_not_D_given_I) + (p_E * p_not_D_given_E)
+
+# (b) Probability that detected spyware came from Internet
+p_D <- (p_I * p_D_given_I) + (p_E * p_D_given_E)
+p_I_given_D <- (p_I * p_D_given_I) / p_D
+
+# Print results
+list(p_infected = round(p_infected, 4), p_I_given_D = round(p_I_given_D, 4))

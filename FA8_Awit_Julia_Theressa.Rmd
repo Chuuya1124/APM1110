@@ -1,0 +1,101 @@
+---
+title: "FA8"
+author: "Awit, Julia Theressa"
+output:
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercise 1
+
+The analogue signal received at a detector is normally distributed with a mean of 200 μV and a variance of 256 μV².
+
+```{r}
+mu <- 200
+sigma <- sqrt(256)
+```
+
+## (a) What is the probability that the signal exceeds 224 μV?
+
+```{r}
+prob_a <- 1 - pnorm(224, mu, sigma)
+paste("P(X > 224) =", round(prob_a, 4))
+```
+
+## (b) What is the probability that the signal is between 186 and 224 μV?
+
+```{r}
+prob_b <- pnorm(224, mu, sigma) - pnorm(186, mu, sigma)
+paste("P(186 < X < 224) =", round(prob_b, 4))
+```
+
+## (c) What is the voltage below which 25% of the signals fall?
+
+```{r}
+volt_c <- qnorm(0.25, mu, sigma)
+paste("25th percentile =", round(volt_c, 2), "uV")
+```
+
+## (d) What is the probability that the signal is less than 240 μV given it is greater than 210 μV?
+
+```{r}
+numerator_d <- pnorm(240, mu, sigma) - pnorm(210, mu, sigma)
+denominator_d <- 1 - pnorm(210, mu, sigma)
+prob_d <- numerator_d / denominator_d
+paste("P(X < 240 | X > 210) =", round(prob_d, 4))
+```
+
+## (e) Estimate the interquartile range (IQR)
+
+```{r}
+q1 <- qnorm(0.25, mu, sigma)
+q3 <- qnorm(0.75, mu, sigma)
+iqr <- q3 - q1
+paste("IQR =", round(iqr, 2), "uV")
+```
+
+## (f) What is the probability that the signal is less than 220 μV given it is greater than 210 μV?
+
+```{r}
+numerator_f <- pnorm(220, mu, sigma) - pnorm(210, mu, sigma)
+denominator_f <- 1 - pnorm(210, mu, sigma)
+prob_f <- numerator_f / denominator_f
+paste("P(X < 220 | X > 210) =", round(prob_f, 4))
+```
+
+## (g) If a received signal is known to be greater than 200 μV, what is the probability that it is also greater than 220 μV?
+
+```{r}
+numerator_g <- 1 - pnorm(220, mu, sigma)
+denominator_g <- 1 - pnorm(200, mu, sigma)
+prob_g <- numerator_g / denominator_g
+paste("P(X > 220 | X > 200) =", round(prob_g, 4))
+```
+
+# Exercise 2
+
+The average system failure downtime is 25 minutes, and the variance is 144, so the standard deviation is √144 = 12.
+
+```{r}
+mu2 <- 25
+sigma2 <- sqrt(144)
+```
+
+## (a) Obtain the bounds that include 95% of all customers' downtime.
+
+```{r}
+lower_95 <- qnorm(0.025, mu2, sigma2)
+upper_95 <- qnorm(0.975, mu2, sigma2)
+paste("95% of downtime is between", round(lower_95, 2), "and", round(upper_95, 2), "minutes.")
+```
+
+## (b) Find the bound above which the top 10% of downtimes occur.
+
+```{r}
+bound_90 <- qnorm(0.90, mu2, sigma2)
+paste("10% of downtimes are above", round(bound_90, 2), "minutes.")
+```

@@ -1,0 +1,54 @@
+---
+title: "SA2"
+author: "Julia Theressa Awit"
+output: 
+  pdf_document:
+    toc: false
+    number_sections: false
+---
+
+# Instructions
+
+Test using the **Shapiro-Wilk normality test** on the Ethereum returns for trading data **every five minutes**, from **August 7, 2015 to April 15, 2025**.
+
+> *Note: This uses daily data for simplicity and performance.*
+
+---
+
+# Load Required Packages
+
+```{r message=FALSE, warning=FALSE}
+# Install and load necessary packages
+required_packages <- c("data.table", "lubridate", "dplyr")
+for (pkg in required_packages) {
+  if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg)
+  library(pkg, character.only = TRUE)
+}
+# Read the CSV file (daily data)
+eth_data <- fread("ethereum_2015-08-07_2025-04-15.csv")
+
+# Display the first few rows
+head(eth_data)
+
+# Convert 'Timestamp' column to datetime format
+eth_data$Date <- ymd_hms(eth_data$Timestamp)
+
+# Sort data by date
+eth_data <- eth_data[order(eth_data$Date)]
+
+# Compute log returns from Close price
+eth_data <- eth_data %>%
+  mutate(Return = c(NA, diff(log(Close)))) %>%
+  filter(!is.na(Return))
+
+# Show first few returns
+head(eth_data$Return)
+
+# Test using Shapiro-Wilk normality test the Ethereum returns for trading data 
+# every five minutes, from August 7, 2015 to April 15, 2025.
+
+# Run the Shapiro-Wilk normality test on log returns
+shapiro_result <- shapiro.test(eth_data$Return)
+
+# Display result
+shapiro_result
